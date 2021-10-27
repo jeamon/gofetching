@@ -1,0 +1,28 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  build:
+     desc: Build the app
+    cmds:
+      - go build -v -o gofetcher.exe .
+    silent: true
+  
+  run:
+    desc: Run the app
+    cmds:
+      - go run main.go
+    silent: true
+
+  test:
+    desc: Execute Unit Tests
+    cmds:
+      - go test -v
+    silent: true
+
+  coverage:
+    desc: Display Test Coverage
+    cmds:
+      - go test -cover
+    silent: true
