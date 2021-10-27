@@ -30,9 +30,9 @@ func Fetch(link string) string {
 }
 
 // FirstWorker demonstrates an approach to use Fetch concurrently.
-func FirstWorker(links *[]string) {
+func FirstWorker(links []string) {
 	wg := &sync.WaitGroup{}
-	for _, link := range *links {
+	for _, link := range links {
 		wg.Add(1)
 		// create a new variable.
 		link := link
@@ -46,9 +46,9 @@ func FirstWorker(links *[]string) {
 }
 
 // SecondWorker demonstrates an approach to use Fetch concurrently.
-func SecondWorker(links *[]string) {
+func SecondWorker(links []string) {
 	wg := &sync.WaitGroup{}
-	for _, link := range *links {
+	for _, link := range links {
 		wg.Add(1)
 		// pass variable to anonymous func.
 		go func(url string) {
@@ -63,8 +63,8 @@ func SecondWorker(links *[]string) {
 // ThirdWorker demonstrates an approach to use Fetch concurrently.
 // Each goroutine puts its result on a channel. Another goroutine
 // monitor that channel and retrieve the result for displaying.
-func ThirdWorker(links *[]string) {
-	numberOfLinks := len(*links)
+func ThirdWorker(links []string) {
+	numberOfLinks := len(links)
 	resultsChannel := make(chan string)
 	done := make(chan bool)
 
@@ -76,7 +76,7 @@ func ThirdWorker(links *[]string) {
 		done <- true
 	}()
 
-	for _, link := range *links {
+	for _, link := range links {
 		// pass variable to anonymous func.
 		go func(url string) {
 			status := Fetch(url)
@@ -93,17 +93,17 @@ func main() {
 	links := []string{"https://cisco.com", "https://google.com", "https://facebook.com", "https://microsoft.com", "https://amazon.com", "https://twitter.com"}
 
 	// launch the 1st technique.
-	FirstWorker(&links)
+	FirstWorker(links)
 
 	fmt.Println()
 
 	// launch the 2nd technique.
-	SecondWorker(&links)
+	SecondWorker(links)
 
 	fmt.Println()
 
 	// launch the 3rd technique.
-	ThirdWorker(&links)
+	ThirdWorker(links)
 }
 
 /*
