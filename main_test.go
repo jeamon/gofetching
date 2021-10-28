@@ -8,7 +8,6 @@ package main
 // view the test coverage : go test -cover
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -53,7 +52,6 @@ func TestFetch_Timeout(t *testing.T) {
 		// delay the response for more than 5secs.
 		time.Sleep(6 * time.Second)
 		w.WriteHeader(http.StatusFound)
-		fmt.Fprintf(w, "n/a")
 	}))
 	defer server.Close()
 
@@ -77,6 +75,7 @@ func TestFetch_EndToEnd(t *testing.T) {
 		{name: "testing status 401", url: "https://httpstat.us/401", want: "401 Unauthorized"},
 		{name: "testing status 404", url: "https://httpstat.us/404", want: "404 Not Found"},
 		{name: "testing status 503", url: "https://httpstat.us/503", want: "503 Service Unavailable"},
+		{name: "testing status n/a", url: "https://hxxxxxxx.us/", want: "n/a"},
 	}
 
 	for _, tc := range testsTable {
