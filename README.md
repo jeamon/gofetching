@@ -10,6 +10,7 @@ A go-based repository to demonstrate multiple techniques to concurrently fetch m
 ```
 
 ~$ go run main.go
+
 https://twitter.com : 200 OK
 https://google.com : 200 OK
 https://microsoft.com : 200 OK
@@ -17,19 +18,26 @@ https://cisco.com : 200 OK
 https://amazon.com : 200 OK
 https://facebook.com : 200 OK
 
-https://twitter.com : 200 OK
 https://google.com : 200 OK
+https://twitter.com : 200 OK
+https://microsoft.com : 200 OK
 https://facebook.com : 200 OK
 https://amazon.com : 200 OK
-https://microsoft.com : 200 OK
 https://cisco.com : 200 OK
 
 https://twitter.com : 200 OK
 https://google.com : 200 OK
+https://amazon.com : 200 OK
 https://facebook.com : 200 OK
 https://microsoft.com : 200 OK
-https://amazon.com : 200 OK
 https://cisco.com : 200 OK
+
+worker 1 :: https://google.com : 200 OK
+worker 0 :: https://microsoft.com : 200 OK
+worker 3 :: https://facebook.com : 200 OK
+worker 1 :: https://amazon.com : 200 OK
+worker 0 :: https://twitter.com : 200 OK
+worker 2 :: https://cisco.com : 200 OK
 
 ```
 
