@@ -46,13 +46,15 @@ worker 2 :: https://cisco.com : 200 OK
 
 ```
 
-~$ go test -v -failfast
+:~$ go test -cover -failfast -v
 === RUN   TestFetch_Valid
---- PASS: TestFetch_Valid (0.00s)
+--- PASS: TestFetch_Valid (0.01s)
 === RUN   TestFetch_Invalid
 --- PASS: TestFetch_Invalid (0.00s)
 === RUN   TestFetch_Timeout
---- PASS: TestFetch_Timeout (6.00s)
+--- PASS: TestFetch_Timeout (6.02s)
+=== RUN   TestFetch_Error
+--- PASS: TestFetch_Error (0.00s)
 === RUN   TestFetch_EndToEnd
 === RUN   TestFetch_EndToEnd/testing_status_200
 === RUN   TestFetch_EndToEnd/testing_status_400
@@ -60,21 +62,24 @@ worker 2 :: https://cisco.com : 200 OK
 === RUN   TestFetch_EndToEnd/testing_status_404
 === RUN   TestFetch_EndToEnd/testing_status_503
 === RUN   TestFetch_EndToEnd/testing_status_n/a
---- PASS: TestFetch_EndToEnd (2.98s)
-    --- PASS: TestFetch_EndToEnd/testing_status_200 (0.83s)
-    --- PASS: TestFetch_EndToEnd/testing_status_400 (0.35s)
-    --- PASS: TestFetch_EndToEnd/testing_status_401 (0.31s)
-    --- PASS: TestFetch_EndToEnd/testing_status_404 (0.33s)
-    --- PASS: TestFetch_EndToEnd/testing_status_503 (0.33s)
-    --- PASS: TestFetch_EndToEnd/testing_status_n/a (0.84s)
+--- PASS: TestFetch_EndToEnd (2.53s)
+    --- PASS: TestFetch_EndToEnd/testing_status_200 (0.70s)
+    --- PASS: TestFetch_EndToEnd/testing_status_400 (0.38s)
+    --- PASS: TestFetch_EndToEnd/testing_status_401 (0.34s)
+    --- PASS: TestFetch_EndToEnd/testing_status_404 (0.32s)
+    --- PASS: TestFetch_EndToEnd/testing_status_503 (0.31s)
+    --- PASS: TestFetch_EndToEnd/testing_status_n/a (0.47s)
 === RUN   ExampleFirstWorker
---- PASS: ExampleFirstWorker (1.43s)
+--- PASS: ExampleFirstWorker (1.82s)
 === RUN   ExampleSecondWorker
---- PASS: ExampleSecondWorker (1.06s)
+--- PASS: ExampleSecondWorker (1.08s)
 === RUN   ExampleThirdWorker
---- PASS: ExampleThirdWorker (1.10s)
+--- PASS: ExampleThirdWorker (1.02s)
+=== RUN   ExampleFourthWorker
+--- PASS: ExampleFourthWorker (1.04s)
 PASS
-ok      github.com/jeamon/go-concurrency-urls-fetching  12.725s
+coverage: 85.5% of statements
+ok      github.com/jeamon/go-concurrency-urls-fetching  13.692s
 
 ```
 
