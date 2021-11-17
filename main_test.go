@@ -62,6 +62,22 @@ func TestFetch_Timeout(t *testing.T) {
 	}
 }
 
+// TestFetch_Error unit tests Fetch function on bad url where request should fail.
+func TestFetch_Error(t *testing.T) {
+	expected := "n/a"
+	// mock a server which only sends status 200.
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusFound)
+	}))
+	defer server.Close()
+
+	status := Fetch(server.URL + "bad url")
+
+	if status != expected {
+		t.Errorf("expected status to be %s but got %s", expected, status)
+	}
+}
+
 // TestFetch_EndToEnd performs a parallel table-driven end-to-end testing of Fetch function.
 func TestFetch_EndToEnd(t *testing.T) {
 	// slice of anonymous struct for functional end-to-end testings.
@@ -109,4 +125,12 @@ func ExampleThirdWorker() {
 	ThirdWorker([]string{"https://cisco.com"})
 	// Output:
 	// https://cisco.com : 200 OK
+}
+
+// ExampleFourthWorker performs end-to-end functional testing of FourthWorker function.
+// Make sure that the website used here (https://cisco.com) is available & accessible.
+func ExampleFourthWorker() {
+	FourthWorker([]string{"https://cisco.com"})
+	// Output:
+	// worker 0 :: https://cisco.com : 200 OK
 }
