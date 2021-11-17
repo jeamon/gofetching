@@ -1,6 +1,8 @@
 package main
 
-// This is a nice challenge to demonstrate different ways to fetch multiple urls concurrently.
+// This is a nice challenge to demonstrate different ways to fetch multiple urls concurrently
+// and display on the terminal the response status code with the associated url.
+
 // Version  : 1.0
 // Author   : Jerome AMON
 // Created  : 26 August 2021
@@ -8,6 +10,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -30,6 +33,9 @@ func Fetch(link string) string {
 }
 
 // FirstWorker demonstrates an approach to use Fetch concurrently.
+// Each url is fetched by a unique goroutine. And the status is
+// displayed by that same goroutine. Here we inject the url link
+// directly into the goroutine as global variable.
 func FirstWorker(links []string) {
 	wg := &sync.WaitGroup{}
 	for _, link := range links {
@@ -46,6 +52,9 @@ func FirstWorker(links []string) {
 }
 
 // SecondWorker demonstrates an approach to use Fetch concurrently.
+// Each url is fetched by a unique goroutine. And the status is
+// displayed by that same goroutine. Here we inject the url link
+// as input parameter to the goroutine function.
 func SecondWorker(links []string) {
 	wg := &sync.WaitGroup{}
 	for _, link := range links {
@@ -87,10 +96,61 @@ func ThirdWorker(links []string) {
 	<-done
 }
 
+// FourthWorker demonstrates an approach to use Fetch concurrently.
+// A pool (with a predefined number) of worker handles all the urls.
+// Each worker fetches the url and builds the result then send it on
+// a results channel. A deterministic loop read & displays each result.
+func FourthWorker(links []string) {
+	n := len(links)
+	// lets use the number of Cores.
+	numberOfWorkers := runtime.NumCPU()
+	if n < numberOfWorkers {
+		numberOfWorkers = n
+	}
+	// buffered channels with number of links.
+	jobsChannel := make(chan string, n)
+	resultsChannel := make(chan string, n)
+
+	// spin up all workers.
+	for i := 0; i < numberOfWorkers; i++ {
+		go func(id int) {
+			for url := range jobsChannel {
+				status := Fetch(url)
+				// build result and add to results channel for displaying.
+				resultsChannel <- fmt.Sprintf("worker %d :: %s : %s\n", id, url, status)
+			}
+		}(i)
+	}
+	// asynchronously feed the jobs channel.
+	go func() {
+		for _, url := range links {
+			jobsChannel <- url
+		}
+	}()
+
+	// ensure to read n number of results.
+	for r := 0; r < n; r++ {
+		fmt.Print(<-resultsChannel)
+	}
+
+	// close to signal workers to terminate.
+	close(jobsChannel)
+}
+
 func main() {
 
 	// list of urls for testing.
-	links := []string{"https://cisco.com", "https://google.com", "https://facebook.com", "https://microsoft.com", "https://amazon.com", "https://twitter.com"}
+	links := []string{
+
+		"https://cisco.com",
+		"https://google.com",
+		"https://facebook.com",
+		"https://microsoft.com",
+		"https://amazon.com",
+		"https://twitter.com",
+	}
+
+	fmt.Println()
 
 	// launch the 1st technique.
 	FirstWorker(links)
@@ -104,33 +164,9 @@ func main() {
 
 	// launch the 3rd technique.
 	ThirdWorker(links)
+
+	fmt.Println()
+
+	// launch the 4th technique.
+	FourthWorker(links)
 }
-
-/*
-// Output:
-
-[22:26:49] {nxos-geek}:~$ go run main.go
-https://twitter.com : 200 OK
-https://google.com : 200 OK
-https://microsoft.com : 200 OK
-https://cisco.com : 200 OK
-https://amazon.com : 200 OK
-https://facebook.com : 200 OK
-
-https://twitter.com : 200 OK
-https://google.com : 200 OK
-https://facebook.com : 200 OK
-https://amazon.com : 200 OK
-https://microsoft.com : 200 OK
-https://cisco.com : 200 OK
-
-https://twitter.com : 200 OK
-https://google.com : 200 OK
-https://facebook.com : 200 OK
-https://microsoft.com : 200 OK
-https://amazon.com : 200 OK
-https://cisco.com : 200 OK
-
-[22:27:10] {nxos-geek}:~$
-
-*/
