@@ -2,6 +2,9 @@ package main
 
 // This is a nice challenge to demonstrate different ways to fetch multiple urls concurrently
 // and display on the terminal the response status code with the associated url.
+// We could improve the fetch result by adding response body size and time taken to fetch.
+// start := time.Now() then n, err := io.Copy(ioutil.Discard, resp.Body)
+// secs := time.Since(start).Seconds() and fmt.Sprintf("%s :: %.2fs :: %7d", resp.Status, secs, n)
 
 // Version  : 1.0
 // Author   : Jerome AMON
