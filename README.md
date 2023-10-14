@@ -1,4 +1,4 @@
-# go-concurrency-urls-fetching
+# go-concurrent-urls-fetching
 
 A go-based repository to demonstrate multiple techniques to concurrently fetch multiple url over http.
 
@@ -79,14 +79,14 @@ worker 2 :: https://cisco.com : 200 OK
 --- PASS: ExampleFourthWorker (1.04s)
 PASS
 coverage: 85.5% of statements
-ok      github.com/jeamon/go-concurrency-urls-fetching  13.692s
+ok      github.com/jeamon/gofetching  13.692s
 
 ```
 
 
 ## License
 
-Please check & read [the license details](https://github.com/jeamon/go-concurrency-urls-fetching/blob/master/LICENSE) 
+Please check & read [the license details](https://github.com/jeamon/gofetching/blob/master/LICENSE) 
 
 
 ## Contact

@@ -1,3 +1,3 @@
-module github.com/jeamon/go-concurrency-urls-fetching
+module github.com/jeamon/gofetching
 
 go 1.17
